@@ -2,7 +2,7 @@ manifestVersion: 1
 id: willitmod-dev-axebench
 category: bitcoin
 name: AxeBench (Dev)
-version: "3.0.4-dev.1"
+version: "3.0.5-dev.1"
 tagline: Bitaxe fleet benchmarking and management
 icon: https://raw.githubusercontent.com/WillItMod/umbrel-community-store/main/willitmod-axebench/icon.png
 description: >-
@@ -29,5 +29,5 @@ path: ""
 defaultUsername: ""
 defaultPassword: ""
 releaseNotes: >-
-  v3.0.4-dev.1: Removes legacy Patreon/nag UI paths; keeps licensing telemetry ping; pools use wallet.worker (worker derived from miner name).
+  v3.0.5-dev.1: Add Avalon Q support (cgminer + web fallback), Avalon Q device add flow, and show cgminer devices consistently in the dashboard.
 submitter: WillItMod
