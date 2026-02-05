@@ -2,7 +2,7 @@ manifestVersion: 1
 id: willitmod-dev-axebench
 category: bitcoin
 name: AxeBench (Dev)
-version: "3.0.7"
+version: "3.0.8"
 tagline: Bitaxe fleet benchmarking and management
 icon: https://raw.githubusercontent.com/WillItMod/umbrel-community-store/main/willitmod-axebench/icon.png
 description: >-
@@ -29,5 +29,5 @@ path: ""
 defaultUsername: ""
 defaultPassword: ""
 releaseNotes: >-
-  v3.0.7: Avalon Q fixes — Add Device no longer greyed out; integrated PSU enforced (no external/shared PSU assignment); config modal adds Avalon web password support.
+  v3.0.8: Fix multi-arch container build for GHCR (arm64). Includes v3.0.7 Avalon Q fixes (integrated PSU enforced; Add Device enabled; config modal password support).
 submitter: WillItMod
