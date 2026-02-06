@@ -48,10 +48,10 @@ services:
           mv "$$tmp" "$$envfile"
         fi
 
-        mkdir -p /data/node /data/pool/config /data/pool/www/pool /data/pool/www/users /data/pool/cps/pool_configs /data/pool/cps/coins /data/templates
+        mkdir -p /data/node /data/pool/config /data/pool/www/pool /data/pool/www/users /data/pool/cps/pool_configs /data/templates
 
-        if [ ! -f "$$tpl_dir/peercoin.conf.template" ] || [ ! -f "$$tpl_dir/ckpool.conf.template" ] || [ ! -f "$$tpl_dir/cps-config.json.template" ] || [ ! -f "$$tpl_dir/cps-peercoin.json.template" ] || [ ! -f "$$tpl_dir/cps-coin-peercoin.json.template" ]; then
-          echo "Template files not found in $$tpl_dir. (Expected peercoin.conf.template, ckpool.conf.template, cps-config.json.template, cps-peercoin.json.template, cps-coin-peercoin.json.template)"
+        if [ ! -f "$$tpl_dir/peercoin.conf.template" ] || [ ! -f "$$tpl_dir/ckpool.conf.template" ] || [ ! -f "$$tpl_dir/cps-config.json.template" ] || [ ! -f "$$tpl_dir/cps-peercoin.json.template" ]; then
+          echo "Template files not found in $$tpl_dir. (Expected peercoin.conf.template, ckpool.conf.template, cps-config.json.template, cps-peercoin.json.template)"
           echo "Contents of $$tpl_dir:"
           ls -la "$$tpl_dir" || true
           exit 1
@@ -129,10 +129,6 @@ services:
           envsubst < "$$tpl_dir/cps-peercoin.json.template" > /data/pool/cps/pool_configs/peercoin.json
           chown -R 1000:1000 /data/pool/cps || true
         fi
-        if [ ! -f /data/pool/cps/coins/peercoin.json ]; then
-          cp "$$tpl_dir/cps-coin-peercoin.json.template" /data/pool/cps/coins/peercoin.json
-          chown -R 1000:1000 /data/pool/cps || true
-        fi
 
   ppcd:
     build:
@@ -145,51 +141,6 @@ services:
     volumes:
       - ${APP_DATA_DIR}/data/node:/data
 
-  wallet_init:
-    build:
-      context: ${APP_DATA_DIR}/data/peercoind
-    user: "1000:1000"
-    restart: on-failure
-    depends_on:
-      ppcd:
-        condition: service_started
-      init:
-        condition: service_completed_successfully
-    volumes:
-      - ${APP_DATA_DIR}/data/node:/data
-    command:
-      - /bin/sh
-      - -ec
-      - |-
-        set -eu
-
-        cli="peercoin-cli -conf=/data/peercoin.conf -datadir=/data -rpcconnect=ppcd"
-
-        # Wait up to ~3 minutes for RPC to be ready
-        for i in $$(seq 1 180); do
-          if $$cli getblockchaininfo >/dev/null 2>&1; then
-            break
-          fi
-          sleep 1
-        done
-
-        if ! $$cli getblockchaininfo >/dev/null 2>&1; then
-          echo "[axeppc] RPC not ready after timeout" >&2
-          exit 1
-        fi
-
-        wallets="$$( $$cli listwallets | tr -d ' \n\r\t' || true )"
-        if [ "$$wallets" = "[]" ]; then
-          existing="$$( $$cli listwalletdir | grep -oE '\"name\"[[:space:]]*:[[:space:]]*\"[^\"]+\"' | head -n 1 | sed -E 's/.*\"name\"[[:space:]]*:[[:space:]]*\"([^\"]+)\".*/\1/' || true )"
-          if [ -n "$$existing" ]; then
-            echo "[axeppc] Loading wallet: $$existing" >&2
-            $$cli loadwallet "$$existing" true >/dev/null
-          else
-            echo "[axeppc] Creating wallet: axeppc_wallet" >&2
-            $$cli -named createwallet wallet_name=axeppc_wallet load_on_startup=true >/dev/null
-          fi
-        fi
-
   redis:
     image: redis:7-alpine
     restart: unless-stopped
@@ -199,21 +150,15 @@ services:
     user: "1000:1000"
     restart: unless-stopped
     depends_on:
-      ppcd:
-        condition: service_started
-      redis:
-        condition: service_started
-      init:
-        condition: service_completed_successfully
-      wallet_init:
-        condition: service_completed_successfully
+      - ppcd
+      - redis
+      - init
     stop_grace_period: 30s
     ports:
       - "8765:3333/tcp"
     volumes:
       - ${APP_DATA_DIR}/data/pool/cps/config.json:/app/config.json:ro
       - ${APP_DATA_DIR}/data/pool/cps/pool_configs:/app/pool_configs:ro
-      - ${APP_DATA_DIR}/data/pool/cps/coins/peercoin.json:/app/coins/peercoin.json:ro
 
   app:
     image: ghcr.io/willitmod/axeppc-app-umbrel-dev:0.2.4
