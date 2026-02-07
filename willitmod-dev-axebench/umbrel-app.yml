@@ -2,7 +2,7 @@ manifestVersion: 1
 id: willitmod-dev-axebench
 category: bitcoin
 name: AxeBench (Dev)
-version: "0.3.17"
+version: "3.0.18"
 tagline: Bitaxe fleet benchmarking and management
 icon: https://raw.githubusercontent.com/WillItMod/umbrel-community-store/main/willitmod-axebench/icon.png
 description: >-
@@ -33,5 +33,5 @@ path: ""
 defaultUsername: ""
 defaultPassword: ""
 releaseNotes: >-
-  v0.3.17: Make AxeBench UI subpath-aware so it works behind 5tratumOS NGINX at /apps/axebench/ (router base + relative assets + API prefixing).
+  v3.0.18: Fix version display in-app and align DEV store version with image tag; includes /apps/axebench/ subpath support.
 submitter: WillItMod
