@@ -164,10 +164,7 @@ services:
         fi
 
   xecd:
-    build:
-      # 5tratumos installs store `data/` into ${APP_DATA_DIR}/data (not into the app dir),
-      # so the build context must point at the persisted app data directory.
-      context: "${APP_DATA_DIR}/data/xecd"
+    image: ghcr.io/willitmod/xecd-abc:0.32.7-nojemalloc
     user: "1000:1000"
     restart: unless-stopped
     stop_grace_period: 15m30s
@@ -220,7 +217,7 @@ services:
       - ${APP_DATA_DIR}/data/pool/www:/www
 
   app:
-    image: ghcr.io/willitmod/axexec-app-umbrel-dev:0.1.8
+    image: ghcr.io/willitmod/axexec-app-umbrel-dev:0.1.9
     user: "1000:1000"
     restart: on-failure
     stop_grace_period: 30s
@@ -245,7 +242,7 @@ services:
       CKPOOL_STATUS_DIR: "/data/pool/www/pool"
       APP_CHANNEL: "DEV"
       APP_VERSION_SUFFIX: "-dev"
-      XECD_IMAGE: "Bitcoin ABC v0.32.7 (local build)"
+      XECD_IMAGE: "Bitcoin ABC v0.32.7 (nojemalloc)"
       CKPOOL_IMAGE: "ghcr.io/willitmod/ecash-ckpool-solo:18b38ad"
       STATIC_DIR: "/app/static"
 
