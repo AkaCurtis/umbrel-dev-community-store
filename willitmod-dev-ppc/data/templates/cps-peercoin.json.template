@@ -20,10 +20,10 @@
 
   "ports": {
     "${CPS_STRATUM_PORT}": {
-      "diff": 8192,
+      "diff": 64,
       "varDiff": {
-        "minDiff": 1024,
-        "maxDiff": null,
+        "minDiff": 16,
+        "maxDiff": 16384,
         "targetTime": 15,
         "retargetTime": 90,
         "variancePercent": 30
