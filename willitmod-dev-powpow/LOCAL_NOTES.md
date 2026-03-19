@@ -10,7 +10,7 @@ This package is now wired to the real PowPow stack.
   - `ghcr.io/willitmod/powpow-litecoin:0.2.0-dev`
   - `ghcr.io/willitmod/powpow-dogecoin:0.2.0-dev`
   - `ghcr.io/willitmod/powpow-pool:0.2.0-dev`
-- Miner endpoint hint remains `stratum+tcp://10.10.10.235:9555`
+- Miner endpoint hint is derived from the host OS IP via `${NETWORK_IP}`
 - In-app UI displays `PowPow v0.2.0` with the `DEV` pill and experimental warning banner
 
 ## Packaging notes

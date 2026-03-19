@@ -49,7 +49,7 @@ services:
     environment:
       APP_CHANNEL: "DEV"
       APP_VERSION: "0.2.0-dev"
-      NETWORK_HOST_HINT: "10.10.10.235"
+      NETWORK_IP: "${NETWORK_IP}"
       POOL_API_URL: "http://pool:8001"
       POSTGRES_PASSWORD: "${APP_PASSWORD}"
 

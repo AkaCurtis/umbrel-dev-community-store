@@ -14,7 +14,7 @@ description: >-
   If you want a working known-good app, DO NOT USE DEV APPS.
 
   Miner connection:
-    - URL: `stratum+tcp://10.10.10.235:9555`
+    - URL: `stratum+tcp://<your-5tratumos-host-ip>:9555`
     - Username: `solo.workername`
     - Password: anything
 
