@@ -5,11 +5,11 @@ This package is now wired to the real PowPow stack.
 ## Current status
 
 - Uses GHCR images published from `WillItMod/PowPow_Build`
-- App image: `ghcr.io/willitmod/powpow-app:0.2.7-dev`
+- App image: `ghcr.io/willitmod/powpow-app:0.2.8-dev`
 - Service images:
-  - `ghcr.io/willitmod/powpow-litecoin:0.2.7-dev`
-  - `ghcr.io/willitmod/powpow-dogecoin:0.2.7-dev`
-  - `ghcr.io/willitmod/powpow-pool:0.2.7-dev`
+  - `ghcr.io/willitmod/powpow-litecoin:0.2.8-dev`
+  - `ghcr.io/willitmod/powpow-dogecoin:0.2.8-dev`
+  - `ghcr.io/willitmod/powpow-pool:0.2.8-dev`
 - Runtime UI behavior is intentionally aligned to the current live host baseline at `10.10.10.235`
 - Miner endpoint hint is injected through packaging with `NETWORK_HOST_HINT: "${NETWORK_IP}"`
 - App version display is currently whatever the host-baseline runtime shows by default
@@ -19,6 +19,7 @@ This package is now wired to the real PowPow stack.
 - The stale DigiByte/Miningcore package content is ignored via `.gitignore`
 - PostgreSQL schema init files are copied from `PowPow_Build/postgres/init`
 - A rerunnable schema bootstrap step runs during startup to repair reused Postgres volumes that skipped first-run init
+- The pool image also runs that bootstrap before starting dogepool, so schema recovery is not dependent on a separate bootstrap container
 - `docker-compose.yml` now represents the PowPow-native stack:
   - `app`
   - `litecoin`

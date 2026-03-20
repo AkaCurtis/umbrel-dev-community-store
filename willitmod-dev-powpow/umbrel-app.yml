@@ -2,7 +2,7 @@ manifestVersion: 1
 id: axepowpow
 category: altcoin
 name: "PowPow"
-version: "0.2.7-dev"
+version: "0.2.8-dev"
 tagline: LTC + DOGE merged mining (experimental dev)
 description: >-
   WARNING: EXPERIMENTAL-DEV (TESTING ONLY)
