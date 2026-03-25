@@ -112,7 +112,7 @@ services:
       MINDIFF: "1"
       STARTDIFF: "16"
       MAXDIFF: "0"
-    command: ["-k", "-L", "-c", "/data/pool/config/ckpool.conf"]
+    command: ["-L", "-c", "/data/pool/config/ckpool.conf"]
     ports:
       - "9265:3333/tcp"
     volumes:
