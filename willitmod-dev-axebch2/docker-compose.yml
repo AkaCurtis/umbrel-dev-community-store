@@ -24,14 +24,14 @@ services:
         chmod -R ug+rwX /data/ui /data/node /data/pool || true
 
   app:
-    image: ghcr.io/willitmod/axebch2-app:0.1.15-dev
+    image: ghcr.io/willitmod/axebch2-app:0.1.21-dev
     user: "1000:1000"
     restart: unless-stopped
     depends_on:
       init_permissions:
         condition: service_completed_successfully
       bch2:
-        condition: service_healthy
+        condition: service_started
     networks:
       default:
         aliases:
@@ -42,11 +42,11 @@ services:
     volumes:
       - ${APP_DATA_DIR}/data:/data
     environment:
-      APP_VERSION: "0.1.15"
+      APP_VERSION: "0.1.21"
       APP_CHANNEL: "DEV"
       NETWORK_IP: "${NETWORK_IP}"
-      BCH2_NODE_IMAGE: "ghcr.io/willitmod/axebch2-node:0.1.15-dev"
-      CKPOOL_IMAGE: "ghcr.io/willitmod/axebch2-ckpool:0.1.14-dev"
+      BCH2_NODE_IMAGE: "ghcr.io/willitmod/axebch2-node:0.1.21-dev"
+      CKPOOL_IMAGE: "ghcr.io/willitmod/axebch2-ckpool:0.1.15-dev"
       BCH2_RPC_HOST: "bch2"
       BCH2_RPC_PORT: "8342"
       BCH2_RPC_USER: "bch2"
@@ -63,7 +63,7 @@ services:
       start_period: 90s
 
   bch2:
-    image: ghcr.io/willitmod/axebch2-node:0.1.15-dev
+    image: ghcr.io/willitmod/axebch2-node:0.1.21-dev
     restart: unless-stopped
     stop_grace_period: 15m30s
     depends_on:
@@ -94,13 +94,13 @@ services:
       start_period: 2m
 
   ckpool:
-    image: ghcr.io/willitmod/axebch2-ckpool:0.1.14-dev
+    image: ghcr.io/willitmod/axebch2-ckpool:0.1.15-dev
     restart: unless-stopped
     depends_on:
       init_permissions:
         condition: service_completed_successfully
       bch2:
-        condition: service_healthy
+        condition: service_started
     environment:
       BCH2_RPC_HOST: "bch2"
       BCH2_RPC_PORT: "8342"
