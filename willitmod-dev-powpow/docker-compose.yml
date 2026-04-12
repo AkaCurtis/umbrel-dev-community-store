@@ -82,6 +82,7 @@ services:
 
   litecoin:
     image: ghcr.io/willitmod/powpow-litecoin:0.2.10-dev
+    user: "1000:1000"
     restart: unless-stopped
     depends_on:
       init:
@@ -97,6 +98,7 @@ services:
 
   dogecoin:
     image: ghcr.io/willitmod/powpow-dogecoin:0.2.10-dev
+    user: "1000:1000"
     restart: unless-stopped
     depends_on:
       init:
@@ -112,6 +114,7 @@ services:
 
   pool:
     image: ghcr.io/willitmod/powpow-pool:0.2.13-dev
+    user: "1000:1000"
     restart: unless-stopped
     depends_on:
       init:
