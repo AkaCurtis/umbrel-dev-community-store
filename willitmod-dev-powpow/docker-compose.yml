@@ -9,18 +9,45 @@ services:
     networks:
       - umbrel_main_network
 
-  init_permissions:
+  init:
     image: alpine:3.22.1
     restart: "no"
     volumes:
       - ${APP_DATA_DIR}/data:/data
+      - ${APP_DATA_DIR}:/appdata
     command:
       - /bin/sh
       - -ec
       - |-
         set -eu
+
+        # Persist JWT secret into ${APP_DATA_DIR}/.env so that SSH restarts
+        # (without exports.sh) don't boot app_proxy with an empty JWT_SECRET.
+        if [ -n "${JWT_SECRET:-}" ]; then
+          envfile="/appdata/.env"
+          tmp="/appdata/.env.tmp"
+          if [ -f "$$envfile" ]; then
+            grep -v '^JWT_SECRET=' "$$envfile" > "$$tmp" || true
+          else
+            : > "$$tmp"
+          fi
+          printf "JWT_SECRET=%s\n" "${JWT_SECRET}" >> "$$tmp"
+          chmod 600 "$$tmp" || true
+          chown 1000:1000 "$$tmp" || true
+          mv "$$tmp" "$$envfile"
+        fi
+
         mkdir -p /data/ui/state /data/litecoin /data/dogecoin /data/pool/config /data/postgres
+
+        # The host may create settings.yml as root during update/install; ensure it stays writable.
+        touch /appdata/settings.yml
+        chown 1000:1000 /appdata/settings.yml || true
+
+        # Set permissions for app data directories
         chown -R 1000:1000 /data/ui /data/litecoin /data/dogecoin /data/pool /data/pool/config || true
+        chmod -R ug+rwX /data/ui /data/litecoin /data/dogecoin /data/pool || true
+        
+        # PostgreSQL needs specific ownership and permissions
         chown -R 70:70 /data/postgres || true
         chmod 700 /data/postgres || true
 
@@ -29,7 +56,7 @@ services:
     user: "1000:1000"
     restart: unless-stopped
     depends_on:
-      init_permissions:
+      init:
         condition: service_completed_successfully
     networks:
       default:
@@ -57,7 +84,7 @@ services:
     image: ghcr.io/willitmod/powpow-litecoin:0.2.10-dev
     restart: unless-stopped
     depends_on:
-      init_permissions:
+      init:
         condition: service_completed_successfully
     volumes:
       - ${APP_DATA_DIR}/data:/data
@@ -72,7 +99,7 @@ services:
     image: ghcr.io/willitmod/powpow-dogecoin:0.2.10-dev
     restart: unless-stopped
     depends_on:
-      init_permissions:
+      init:
         condition: service_completed_successfully
     volumes:
       - ${APP_DATA_DIR}/data:/data
@@ -87,7 +114,7 @@ services:
     image: ghcr.io/willitmod/powpow-pool:0.2.13-dev
     restart: unless-stopped
     depends_on:
-      init_permissions:
+      init:
         condition: service_completed_successfully
       postgres:
         condition: service_started
@@ -106,7 +133,7 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     depends_on:
-      init_permissions:
+      init:
         condition: service_completed_successfully
     environment:
       POSTGRES_USER: "mergedmining"
