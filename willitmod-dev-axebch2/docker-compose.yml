@@ -56,10 +56,10 @@ services:
 
         if [ ! -f /data/node/bitcoinII.conf ]; then
           envsubst < /data/templates/bitcoinII.conf.template > /data/node/bitcoinII.conf
-          chown -R 1000:1000 /data/node || true
-        else
-          chown 1000:1000 /data/node/bitcoinII.conf || true
         fi
+        # Always ensure proper ownership on the config file
+        chown -R 1000:1000 /data/node || true
+        chmod -R ug+rw /data/node || true
 
         needs_ckpool_regen=0
         if [ -f /data/pool/config/ckpool.conf ]; then
