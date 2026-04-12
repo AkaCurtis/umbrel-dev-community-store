@@ -4,8 +4,22 @@ txindex=0
 # Pruning: disabled by default (archival).
 prune=0
 
+# Allocate more RAM for database cache during sync (in MB)
+dbcache=4000
+
+# Skip mempool transactions during IBD (faster sync)
+blocksonly=1
+
 # Allow more peers (helps initial sync + network robustness).
 maxconnections=256
+
+# Add reliable nodes for faster peer discovery
+addnode=seed.bitcoin.sipa.be
+addnode=dnsseed.bluematt.me
+addnode=dnsseed.bitcoin.dashjr.org
+addnode=seed.bitcoinstats.com
+addnode=seed.bitcoin.jonasschnelli.ch
+addnode=seed.btc.petertodd.org
 
 # Mainnet only.
 
@@ -14,6 +28,8 @@ port=${BTC_P2P_PORT}
 rpcport=${BTC_RPC_PORT}
 
 # RPC (not published to the host by default; internal apps only)
+rpcworkqueue=128
+rpcthreads=16
 rpcuser=${RPC_USER}
 rpcpassword=${RPC_PASSWORD}
 rpcbind=0.0.0.0
