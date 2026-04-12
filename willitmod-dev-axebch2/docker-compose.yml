@@ -61,6 +61,7 @@ services:
           else
             # Fallback: create config inline if template file doesn't exist
             printf '%s\n' \
+              '[main]' \
               'server=1' \
               'txindex=0' \
               '' \
@@ -90,6 +91,8 @@ services:
         # Always ensure proper ownership on the config file
         chown -R 1000:1000 /data/node || true
         chmod -R ug+rw /data/node || true
+        # Make bitcoinII.conf world-writable so both root (bch2) and user 1000 (app) can modify it
+        chmod 666 /data/node/bitcoinII.conf 2>/dev/null || true
 
         needs_ckpool_regen=0
         if [ -f /data/pool/config/ckpool.conf ]; then
@@ -207,7 +210,6 @@ services:
 
   bch2:
     image: ghcr.io/willitmod/axebch2-node:0.1.29-dev
-    user: "1000:1000"
     restart: unless-stopped
     stop_grace_period: 15m30s
     depends_on:
