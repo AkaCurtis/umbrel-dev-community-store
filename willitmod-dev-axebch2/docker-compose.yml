@@ -54,8 +54,38 @@ services:
         touch /appdata/settings.yml
         chown 1000:1000 /appdata/settings.yml || true
 
+        # Create bitcoinII.conf if it doesn't exist
         if [ ! -f /data/node/bitcoinII.conf ]; then
-          envsubst < /data/templates/bitcoinII.conf.template > /data/node/bitcoinII.conf
+          if [ -f /data/templates/bitcoinII.conf.template ]; then
+            envsubst < /data/templates/bitcoinII.conf.template > /data/node/bitcoinII.conf
+          else
+            # Fallback: create config inline if template file doesn't exist
+            printf '%s\n' \
+              'server=1' \
+              'txindex=0' \
+              '' \
+              "rpcuser=${RPC_USER}" \
+              "rpcpassword=${RPC_PASSWORD}" \
+              "rpcport=${BCH2_RPC_PORT}" \
+              'rpcbind=0.0.0.0' \
+              'rpcallowip=127.0.0.1/32' \
+              "rpcallowip=${APPS_SUBNET}" \
+              'rpcallowip=10.0.0.0/8' \
+              'rpcallowip=172.16.0.0/12' \
+              'rpcallowip=192.168.0.0/16' \
+              '' \
+              '# ZMQ (ckpool block notifications)' \
+              "zmqpubhashblock=tcp://0.0.0.0:${BCH2_ZMQ_HASHBLOCK_PORT}" \
+              '' \
+              '# Network' \
+              "port=${BCH2_P2P_PORT}" \
+              'listen=1' \
+              'upnp=1' \
+              '' \
+              '# Pruning (optional): keep only a rolling tail of recent blocks to reduce retained history.' \
+              'prune=550' \
+              > /data/node/bitcoinII.conf
+          fi
         fi
         # Always ensure proper ownership on the config file
         chown -R 1000:1000 /data/node || true
@@ -78,7 +108,34 @@ services:
           if [ -f /data/pool/config/ckpool.conf ]; then
             mv /data/pool/config/ckpool.conf "/data/pool/config/ckpool.conf.bak.$$(date +%s 2>/dev/null || echo 0)" || true
           fi
-          envsubst < /data/templates/ckpool.conf.template > /data/pool/config/ckpool.conf
+          
+          if [ -f /data/templates/ckpool.conf.template ]; then
+            envsubst < /data/templates/ckpool.conf.template > /data/pool/config/ckpool.conf
+          else
+            # Fallback: create config inline if template file doesn't exist
+            printf '%s\n' \
+              '{' \
+              '  "btcd": [' \
+              '    {' \
+              "      \"url\": \"bch2:${BCH2_RPC_PORT}\"," \
+              "      \"auth\": \"${RPC_USER}\"," \
+              "      \"pass\": \"${RPC_PASSWORD}\"," \
+              '      "notify": true' \
+              '    }' \
+              '  ],' \
+              "  \"btcaddress\": \"${PAYOUT_ADDRESS}\"," \
+              '  "btcsig": "/AxeBCH2/",' \
+              '  "mindiff": 1,' \
+              '  "startdiff": 1,' \
+              '  "maxdiff": 0,' \
+              '  "logdir": "/www",' \
+              '  "webdir": "/www/pool",' \
+              '  "userdir": "/www/users",' \
+              "  \"zmqblock\": \"tcp://bch2:${BCH2_ZMQ_HASHBLOCK_PORT}\"" \
+              '}' \
+              > /data/pool/config/ckpool.conf
+          fi
+          
           if [ -n "$$existing_addr" ] && [ "$$existing_addr" != "CHANGEME_BCH_PAYOUT_ADDRESS" ]; then
             tmp="$$(mktemp)"
             if jq --arg a "$$existing_addr" '.btcaddress=$$a' /data/pool/config/ckpool.conf > "$$tmp" 2>/dev/null; then
