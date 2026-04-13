@@ -184,6 +184,10 @@ services:
       BTC_DBCACHE_MB: '4000'
     ports:
       - '8333:28333'
+    ulimits:
+      nofile:
+        soft: 16384
+        hard: 16384
     volumes:
       - ${APP_DATA_DIR}/data/node:/data
       - >-
