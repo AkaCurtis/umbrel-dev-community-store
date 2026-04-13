@@ -20,6 +20,13 @@ addnode=dnsseed.bitcoin.dashjr.org
 addnode=seed.bitcoinstats.com
 addnode=seed.bitcoin.jonasschnelli.ch
 addnode=seed.btc.petertodd.org
+addnode=dnsseed.emzy.de
+addnode=seed.bitcoin.sprovoost.nl
+addnode=dnsseed.bitcoin.dashjr.org
+addnode=seed.btc.petertodd.org
+
+# Increase max outbound connections during sync
+maxuploadtarget=0
 
 # Mainnet only.
 
