@@ -2,7 +2,7 @@ manifestVersion: 1
 id: willitmod-dev-btc
 category: bitcoin
 name: AxeBTC
-version: "0.7.82.8-dev"
+version: "0.7.82.9-dev"
 tagline: BTC node + solo pool
 description: >-
   THESE APPS ARE IN DEVELOPMENT. THEY MAY WORK, THEY MAY NOT. THESE ARE FOR TESTING ONLY.
@@ -45,7 +45,7 @@ widgets:
   - id: "sync"
     type: "text-with-progress"
     refresh: "5s"
-    endpoint: "axebtc-app:3000/api/widget/sync"
+    endpoint: "/api/widget/sync"
     link: ""
     example:
       type: "text-with-progress"
@@ -57,7 +57,7 @@ widgets:
   - id: "pool"
     type: "three-stats"
     refresh: "30s"
-    endpoint: "axebtc-app:3000/api/widget/pool"
+    endpoint: "/api/widget/pool"
     link: ""
     example:
       type: "three-stats"
