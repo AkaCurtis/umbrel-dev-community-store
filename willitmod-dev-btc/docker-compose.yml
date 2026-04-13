@@ -5,6 +5,7 @@ services:
       APP_HOST: axebtc-app
       APP_PORT: 3000
       JWT_SECRET: ${JWT_SECRET}
+      PROXY_AUTH_WHITELIST: "/api/widget/*"
     networks:
       - umbrel_main_network
     container_name: willitmod-dev-btc_app_proxy_1
