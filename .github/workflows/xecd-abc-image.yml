@@ -55,5 +55,5 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-            ghcr.io/willitmod/xecd-abc:${{ steps.version.outputs.version }}-nojemalloc
+            ghcr.io/willitmod/axexec-node:${{ steps.version.outputs.version }}-nojemalloc
           provenance: false
