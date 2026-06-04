@@ -2,7 +2,7 @@ manifestVersion: 1
 id: willitmod-dev-ppc
 category: altcoin
 name: AxePPC
-version: "0.2.30-dev"
+version: "0.2.29-dev"
 tagline: PPC node + solo pool
 description: >-
   ALPHA RELEASE (DEV CHANNEL)
