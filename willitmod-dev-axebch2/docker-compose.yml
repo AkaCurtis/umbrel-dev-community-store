@@ -24,7 +24,7 @@ services:
         chmod -R ug+rwX /data/ui /data/node /data/pool || true
 
   app:
-    image: ghcr.io/willitmod/axebch2-app:0.1.39-dev
+    image: ghcr.io/willitmod/axebch2-app:0.2.0.00-dev
     user: "1000:1000"
     restart: unless-stopped
     depends_on:
@@ -44,8 +44,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       APP_ID: "willitmod-dev-axebch2"
-      APP_VERSION: "0.1.40-alpha"
+      APP_VERSION: "0.2.0.00-dev"
       APP_CHANNEL: "DEV"
+      APP_RELEASE_PHASE: "ALPHA"
       APP_SELF_RESTART_ENABLED: "1"
       APP_COMPOSE_PROJECT: "${COMPOSE_PROJECT_NAME}"
       NETWORK_IP: "${NETWORK_IP}"
