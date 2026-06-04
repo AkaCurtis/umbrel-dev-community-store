@@ -18,9 +18,9 @@ Development/test app store for WillItMod apps.
 
 ### Hosted / utility apps
 
-- **AxeBench (Dev)** (`willitmod-dev-axebench`) - `4.0.25-dev`
-- **AxeLive (Dev)** (`willitmod-dev-axelive`) - `1.4.1-dev`
-- **AxeMIG** (`willitmod-dev-axemig`) - `0.1.20-dev`
+- **AxeBench (Dev)** (`willitmod-dev-axebench`) - `4.0.27-dev`
+- **AxeLive (Dev)** (`willitmod-dev-axelive`) - `1.4.2-dev`
+- **AxeMIG** (`willitmod-dev-axemig`) - `0.1.21-dev`
 
 ### Node + solo pool / mining apps
 

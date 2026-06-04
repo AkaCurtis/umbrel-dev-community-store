@@ -2,7 +2,7 @@
 id: willitmod-dev-axebench
 category: bitcoin
 name: AxeBench (Dev)
-version: "4.0.26-dev"
+version: "4.0.27-dev"
 tagline: Bitaxe fleet benchmarking and management
 icon: https://raw.githubusercontent.com/WillItMod/umbrel-community-store/main/willitmod-axebench/icon.png
 description: >-
@@ -37,6 +37,10 @@ path: ""
 defaultUsername: ""
 defaultPassword: ""
 releaseNotes: >-
+  v4.0.27-dev:
+    - Remove a redundant Docker platform pin from the runtime image build.
+    - Keep the app image aligned with the current dev-store recipe.
+
   v4.0.26-dev:
     - Align the app, UI, and dev-store versions after the v4 refresh series.
     - Update the store maturity wording to ALPHA while keeping the dev-channel version suffix.
