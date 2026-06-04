@@ -35,7 +35,7 @@ path: ""
 defaultUsername: ""
 defaultPassword: ""
 releaseNotes: >-
-  v0.1.21-dev: Replaces the old AxeBTCF wording in migration guidance with AxeBTC.
+  v0.1.21-dev: Replaces legacy Fractal wording in migration guidance with AxeBTC.
 
   v0.1.20-dev: Relaxes the in-app maturity label to ALPHA while keeping migration safety guidance clear.
 
