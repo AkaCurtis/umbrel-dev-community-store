@@ -2,7 +2,7 @@ manifestVersion: 1
 id: willitmod-dev-axemig
 category: bitcoin
 name: AxeMIG
-version: "0.1.18"
+version: "0.1.19"
 tagline: Data-only blockchain migration tool
 description: >-
   THESE APPS ARE IN DEVELOPMENT. THEY MAY WORK, THEY MAY NOT. THESE ARE FOR TESTING ONLY.
@@ -36,5 +36,5 @@ path: ""
 defaultUsername: ""
 defaultPassword: ""
 releaseNotes: >-
-  v0.1.18: Fixes helper payload passing so endpoint validation, USB device discovery, and USB export discovery receive the data they need inside the helper container.
+  v0.1.19: Fixes helper payload passing for endpoint/USB discovery and returns JSON 404 for unknown API routes so utility-app probes do not receive the HTML app shell as a false success.
 submitter: WillItMod
