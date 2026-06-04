@@ -240,7 +240,7 @@ services:
       XEC_RPC_USER: "xec"
       XEC_RPC_PASS: "${APP_PASSWORD}"
       CKPOOL_STATUS_DIR: "/data/pool/www/pool"
-      APP_CHANNEL: "DEV"
+      APP_CHANNEL: "ALPHA"
       APP_VERSION_SUFFIX: "-dev"
       XECD_IMAGE: "ghcr.io/willitmod/axexec-node:0.33.4-nojemalloc"
       CKPOOL_IMAGE: "ghcr.io/willitmod/ecash-ckpool-solo:18b38ad"

@@ -41,8 +41,8 @@ services:
     volumes:
       - ${APP_DATA_DIR}/data:/data
     environment:
-      APP_VERSION: "0.2.24"
-      APP_CHANNEL: "DEV"
+      APP_VERSION: "0.2.24-dev"
+      APP_CHANNEL: "ALPHA"
       NETWORK_HOST_HINT: "${NETWORK_IP}"
       POOL_API_URL: "http://pool:8001"
       POSTGRES_PASSWORD: "${APP_PASSWORD}"

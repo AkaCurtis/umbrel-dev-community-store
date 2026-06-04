@@ -2,14 +2,14 @@ manifestVersion: 1
 id: willitmod-dev-axemig
 category: bitcoin
 name: AxeMIG
-version: "0.1.19"
+version: "0.1.19-dev"
 tagline: Data-only blockchain migration tool
 description: >-
   THESE APPS ARE IN DEVELOPMENT. THEY MAY WORK, THEY MAY NOT. THESE ARE FOR TESTING ONLY.
   If you want to support development, then use these apps and provide HELPFUL feedback.
   If you want a working known good app, then DO NOT USE DEV APPS.
 
-  EXPERIMENTAL - PRE ALPHA - USE WITH CAUTION.
+  ALPHA RELEASE (DEV CHANNEL) - USE WITH CAUTION.
 
 
   AxeMIG helps you move/copy chain data (blocks/chainstate, optional peers/indexes) between Umbrel node apps.
@@ -36,5 +36,5 @@ path: ""
 defaultUsername: ""
 defaultPassword: ""
 releaseNotes: >-
-  v0.1.19: Fixes helper payload passing for endpoint/USB discovery and returns JSON 404 for unknown API routes so utility-app probes do not receive the HTML app shell as a false success.
+  v0.1.19-dev: Fixes helper payload passing for endpoint/USB discovery and returns JSON 404 for unknown API routes so utility-app probes do not receive the HTML app shell as a false success.
 submitter: WillItMod

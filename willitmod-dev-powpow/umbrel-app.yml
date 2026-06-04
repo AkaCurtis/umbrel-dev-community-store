@@ -3,11 +3,11 @@ id: willitmod-dev-powpow
 category: altcoin
 name: "PowPow"
 version: "0.2.24-dev"
-tagline: LTC + DOGE merged mining (experimental dev)
+tagline: LTC + DOGE merged mining (alpha dev)
 description: >-
-  WARNING: EXPERIMENTAL-DEV (TESTING ONLY)
+  ALPHA RELEASE (DEV CHANNEL)
 
-  May break often. May not work. You have been warned!
+  May break while this is being tested. You have been warned!
 
   THIS APP IS IN DEVELOPMENT. IT MAY WORK, IT MAY NOT. THIS IS FOR TESTING ONLY.
   If you want to support development, use this app and provide HELPFUL feedback.
