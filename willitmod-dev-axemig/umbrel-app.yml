@@ -2,7 +2,7 @@ manifestVersion: 1
 id: willitmod-dev-axemig
 category: bitcoin
 name: AxeMIG
-version: "0.1.20-dev"
+version: "0.1.21-dev"
 tagline: Data-only blockchain migration tool
 description: >-
   ALPHA RELEASE (DEV CHANNEL)
@@ -16,7 +16,7 @@ description: >-
 
 
   Typical workflow:
-    - Install the target node app (AxeBTCF / AxeBCH / AxeDGB / etc) and start it until it shows Synchronising (IBD started), then stop it.
+    - Install the target node app (AxeBTC / AxeBCH / AxeDGB / etc) and start it until it shows Synchronising (IBD started), then stop it.
     - Stop the source node app (Umbrel Bitcoin / Knots / etc).
     - Run AxeMIG migration, then start the target node app and verify.
 
@@ -35,6 +35,8 @@ path: ""
 defaultUsername: ""
 defaultPassword: ""
 releaseNotes: >-
+  v0.1.21-dev: Replaces the old AxeBTCF wording in migration guidance with AxeBTC.
+
   v0.1.20-dev: Relaxes the in-app maturity label to ALPHA while keeping migration safety guidance clear.
 
   v0.1.19-dev: Fixes helper payload passing for endpoint/USB discovery and returns JSON 404 for unknown API routes so utility-app probes do not receive the HTML app shell as a false success.

@@ -2,11 +2,11 @@
 id: willitmod-dev-axebench
 category: bitcoin
 name: AxeBench (Dev)
-version: "4.0.25-dev"
+version: "4.0.26-dev"
 tagline: Bitaxe fleet benchmarking and management
 icon: https://raw.githubusercontent.com/WillItMod/umbrel-community-store/main/willitmod-axebench/icon.png
 description: >-
-  DEV CHANNEL RELEASE
+  ALPHA RELEASE (DEV CHANNEL)
 
   AxeBench is functional and used for active fleet testing, but this dev-store
   build may receive frequent changes while new miner control features are tuned.
@@ -37,6 +37,10 @@ path: ""
 defaultUsername: ""
 defaultPassword: ""
 releaseNotes: >-
+  v4.0.26-dev:
+    - Align the app, UI, and dev-store versions after the v4 refresh series.
+    - Update the store maturity wording to ALPHA while keeping the dev-channel version suffix.
+
   v4.0.25-dev:
     - Stabilize Dashboard auto-refresh so live cards do not flicker offline/online between polls.
     - Keep background refreshes from flipping the top-right refresh button to SYNCING.
