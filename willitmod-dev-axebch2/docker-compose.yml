@@ -44,7 +44,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       APP_ID: "willitmod-dev-axebch2"
-      APP_VERSION: "0.1.39-dev"
+      APP_VERSION: "0.1.40-alpha"
       APP_CHANNEL: "DEV"
       APP_SELF_RESTART_ENABLED: "1"
       APP_COMPOSE_PROJECT: "${COMPOSE_PROJECT_NAME}"

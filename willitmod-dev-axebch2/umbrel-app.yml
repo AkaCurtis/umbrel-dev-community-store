@@ -2,16 +2,17 @@ manifestVersion: 1
 id: willitmod-dev-axebch2
 category: altcoin
 name: "AxeBCH2"
-version: "0.1.39-dev"
-tagline: BCH2 node + solo pool (experimental dev)
+version: "0.1.40-alpha"
+tagline: BCH2 node + solo pool (alpha)
 description: >-
-  WARNING: EXPERIMENTAL-DEV (TESTING ONLY)
+  ALPHA RELEASE (DEV CHANNEL)
 
-  May break often. May not work. You have been warned!
+  AxeBCH2 is functional and has successfully found blocks, but it is still
+  under active development. Expect rough edges, occasional breaking changes,
+  and mining/pool behavior that may still need tuning.
 
-  THIS APP IS IN DEVELOPMENT. IT MAY WORK, IT MAY NOT. THIS IS FOR TESTING ONLY.
-  If you want to support development, use this app and provide HELPFUL feedback.
-  If you want a working known-good app, DO NOT USE DEV APPS.
+  Use this build if you are happy to test, mine, and send helpful feedback.
+  For known-good production setups, use stable/main channel apps.
 
   Miner connection:
     - URL: `stratum+tcp://<your-5tratumos-host-ip>:9265`
