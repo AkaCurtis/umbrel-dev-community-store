@@ -18,20 +18,20 @@ Development/test app store for WillItMod apps.
 
 ### Hosted / utility apps
 
-- **AxeBench (Dev)** (`willitmod-dev-axebench`) - `4.0.20`
-- **AxeLive (Dev)** (`willitmod-dev-axelive`) - `1.4-dev`
-- **AxeMIG** (`willitmod-dev-axemig`) - `0.1.17`
+- **AxeBench (Dev)** (`willitmod-dev-axebench`) - `4.0.25-dev`
+- **AxeLive (Dev)** (`willitmod-dev-axelive`) - `1.4.1-dev`
+- **AxeMIG** (`willitmod-dev-axemig`) - `0.1.20-dev`
 
 ### Node + solo pool / mining apps
 
-- **AxeBTC** (`willitmod-dev-btc`) - `0.7.82.4-dev`
-- **AxeBCH** (`willitmod-dev-bch`) - `0.8.3-rc1-dev`
+- **AxeBTC** (`willitmod-dev-btc`) - `0.7.82.6-dev`
+- **AxeBCH** (`willitmod-dev-bch`) - `0.9.1-dev`
 - **AxeBCH2** (`willitmod-dev-axebch2`) - `0.2.0.00-dev`
 - **AxeBC2** (`willitmod-dev-bc2`) - `0.1.6-dev`
-- **AxeDGB** (`willitmod-dev-dgb`) - `0.9.166-dev`
+- **AxeDGB** (`willitmod-dev-dgb`) - `0.9.168-dev`
 - **AxePPC** (`willitmod-dev-ppc`) - `0.2.30-dev`
-- **AxeXEC** (`willitmod-dev-xec`) - `0.1.10-dev`
-- **PowPow** (`willitmod-dev-powpow`) - `0.2.13-dev`
+- **AxeXEC** (`willitmod-dev-xec`) - `0.1.13-dev`
+- **PowPow** (`willitmod-dev-powpow`) - `0.2.25-dev`
 
 Use `umbrel-app.yml` in each app directory as the current source of truth for the store-visible version number.
 

@@ -200,6 +200,8 @@ services:
       BTC_RPC_USER: "btc"
       BTC_RPC_PASS: "${APP_PASSWORD}"
       CKPOOL_STATUS_DIR: "/data/pool/www/pool"
+      CKPOOL_STRATUM_HOST: "ckpool"
+      CKPOOL_STRATUM_PORT: "3333"
       APP_CHANNEL: "BETA"
       APP_VERSION_SUFFIX: "-dev"
       BITCOIND_IMAGE: "ghcr.io/willitmod/axebtc-bitcoind-switch:0.7.44"
