@@ -2,7 +2,7 @@
 id: willitmod-dev-axebench
 category: bitcoin
 name: AxeBench (Dev)
-version: "4.0.23"
+version: "4.0.24"
 tagline: Bitaxe fleet benchmarking and management
 icon: https://raw.githubusercontent.com/WillItMod/umbrel-community-store/main/willitmod-axebench/icon.png
 description: >-
@@ -33,6 +33,9 @@ path: ""
 defaultUsername: ""
 defaultPassword: ""
 releaseNotes: >-
+  v4.0.24-dev:
+    - Keep quick offline scans quiet in logs while still returning offline devices quickly.
+
   v4.0.23-dev:
     - Speed up Pool and AxeShed device list endpoints when miners are offline.
     - Scan devices concurrently instead of waiting one-by-one through offline timeouts.
