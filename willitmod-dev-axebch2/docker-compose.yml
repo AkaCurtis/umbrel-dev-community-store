@@ -24,7 +24,7 @@ services:
         chmod -R ug+rwX /data/ui /data/node /data/pool || true
 
   app:
-    image: ghcr.io/willitmod/axebch2-app:0.1.38-dev
+    image: ghcr.io/willitmod/axebch2-app:0.1.39-dev
     user: "1000:1000"
     restart: unless-stopped
     depends_on:
@@ -43,13 +43,14 @@ services:
       - ${APP_DATA_DIR}/data:/data
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      APP_VERSION: "0.1.38"
+      APP_ID: "willitmod-dev-axebch2"
+      APP_VERSION: "0.1.39-dev"
       APP_CHANNEL: "DEV"
       APP_SELF_RESTART_ENABLED: "1"
       APP_COMPOSE_PROJECT: "${COMPOSE_PROJECT_NAME}"
       NETWORK_IP: "${NETWORK_IP}"
-      BCH2_NODE_IMAGE: "ghcr.io/willitmod/axebch2-node:0.1.31-dev"
-      CKPOOL_IMAGE: "ghcr.io/willitmod/axebch2-ckpool:0.1.31-dev"
+      BCH2_NODE_IMAGE: "ghcr.io/willitmod/axebch2-node:0.1.33-dev"
+      CKPOOL_IMAGE: "ghcr.io/willitmod/axebch2-ckpool:0.1.33-dev"
       BCH2_RPC_HOST: "bch2"
       BCH2_RPC_PORT: "8342"
       BCH2_RPC_USER: "bch2"
@@ -66,7 +67,7 @@ services:
       start_period: 90s
 
   bch2:
-    image: ghcr.io/willitmod/axebch2-node:0.1.31-dev
+    image: ghcr.io/willitmod/axebch2-node:0.1.33-dev
     restart: unless-stopped
     stop_grace_period: 15m30s
     depends_on:
@@ -106,7 +107,7 @@ services:
       start_period: 2m
 
   ckpool:
-    image: ghcr.io/willitmod/axebch2-ckpool:0.1.31-dev
+    image: ghcr.io/willitmod/axebch2-ckpool:0.1.33-dev
     restart: unless-stopped
     stop_grace_period: 30s
     depends_on:
