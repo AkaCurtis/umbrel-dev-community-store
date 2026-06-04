@@ -24,13 +24,13 @@ Development/test app store for WillItMod apps.
 
 ### Node + solo pool / mining apps
 
-- **AxeBTC** (`willitmod-dev-btc`) - `0.7.82.7-dev`
-- **AxeBCH** (`willitmod-dev-bch`) - `0.9.2-dev`
-- **AxeBCH2** (`willitmod-dev-axebch2`) - `0.2.0.00-dev`
-- **AxeBC2** (`willitmod-dev-bc2`) - `0.1.7-dev`
+- **AxeBTC** (`willitmod-dev-btc`) - `0.7.82.8-dev`
+- **AxeBCH** (`willitmod-dev-bch`) - `0.9.3-dev`
+- **AxeBCH2** (`willitmod-dev-axebch2`) - `0.2.0.01-dev`
+- **AxeBC2** (`willitmod-dev-bc2`) - `0.1.8-dev`
 - **AxeDGB** (`willitmod-dev-dgb`) - `0.9.170-dev`
 - **AxePPC** (`willitmod-dev-ppc`) - `0.2.30-dev`
-- **AxeXEC** (`willitmod-dev-xec`) - `0.1.13-dev`
+- **AxeXEC** (`willitmod-dev-xec`) - `0.1.14-dev`
 - **PowPow** (`willitmod-dev-powpow`) - `0.2.25-dev`
 
 Use `umbrel-app.yml` in each app directory as the current source of truth for the store-visible version number.
