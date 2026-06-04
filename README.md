@@ -18,7 +18,7 @@ Development/test app store for WillItMod apps.
 
 ### Hosted / utility apps
 
-- **AxeBench (Dev)** (`willitmod-dev-axebench`) - `4.0.27-dev`
+- **AxeBench (Dev)** (`willitmod-dev-axebench`) - `4.0.28-dev`
 - **AxeLive (Dev)** (`willitmod-dev-axelive`) - `1.4.2-dev`
 - **AxeMIG** (`willitmod-dev-axemig`) - `0.1.21-dev`
 
@@ -28,7 +28,7 @@ Development/test app store for WillItMod apps.
 - **AxeBCH** (`willitmod-dev-bch`) - `0.9.2-dev`
 - **AxeBCH2** (`willitmod-dev-axebch2`) - `0.2.0.00-dev`
 - **AxeBC2** (`willitmod-dev-bc2`) - `0.1.7-dev`
-- **AxeDGB** (`willitmod-dev-dgb`) - `0.9.169-dev`
+- **AxeDGB** (`willitmod-dev-dgb`) - `0.9.170-dev`
 - **AxePPC** (`willitmod-dev-ppc`) - `0.2.30-dev`
 - **AxeXEC** (`willitmod-dev-xec`) - `0.1.13-dev`
 - **PowPow** (`willitmod-dev-powpow`) - `0.2.25-dev`
