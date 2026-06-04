@@ -2,7 +2,7 @@ manifestVersion: 1
 id: willitmod-dev-axelive
 category: bitcoin
 name: AxeLive (Dev)
-version: "1.4.1-dev"
+version: "1.4.2-dev"
 tagline: Real-time miner monitoring and thermal control
 icon: https://raw.githubusercontent.com/WillItMod/umbrel-community-store/main/willitmod-axelive/icon.png
 description: >-
@@ -29,5 +29,5 @@ path: ""
 defaultUsername: ""
 defaultPassword: ""
 releaseNotes: >-
-  v1.4.1-dev: Aligns app-reported version with the dev image, keeps background refresh from making controls look busy, and allows IP scans to run even when device add capacity has already been reached.
+  v1.4.2-dev: Improves IP scan cancellation when offline miners are slow to respond and fixes a Nano 3/3S thermal model edge case that could silently stop fan-learning updates.
 submitter: WillItMod
