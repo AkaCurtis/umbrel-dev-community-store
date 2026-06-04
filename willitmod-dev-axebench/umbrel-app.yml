@@ -2,7 +2,7 @@
 id: willitmod-dev-axebench
 category: bitcoin
 name: AxeBench (Dev)
-version: "4.0.24"
+version: "4.0.25"
 tagline: Bitaxe fleet benchmarking and management
 icon: https://raw.githubusercontent.com/WillItMod/umbrel-community-store/main/willitmod-axebench/icon.png
 description: >-
@@ -33,6 +33,11 @@ path: ""
 defaultUsername: ""
 defaultPassword: ""
 releaseNotes: >-
+  v4.0.25-dev:
+    - Stabilize Dashboard auto-refresh so live cards do not flicker offline/online between polls.
+    - Keep background refreshes from flipping the top-right refresh button to SYNCING.
+    - Ignore one transient live-status miss for previously-online devices before marking them offline.
+
   v4.0.24-dev:
     - Keep quick offline scans quiet in logs while still returning offline devices quickly.
 
