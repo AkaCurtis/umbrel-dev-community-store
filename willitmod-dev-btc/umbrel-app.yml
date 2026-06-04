@@ -5,9 +5,14 @@ name: AxeBTC
 version: "0.7.82.6-dev"
 tagline: BTC node + solo pool
 description: >-
-  THESE APPS ARE IN DEVELOPMENT. THEY MAY WORK, THEY MAY NOT. THESE ARE FOR TESTING ONLY.
-  If you want to support development, then use these apps and provide HELPFUL feedback.
-  If you want a working known good app, then DO NOT USE DEV APPS.
+  BETA RELEASE (DEV CHANNEL)
+
+  AxeBTC is functional and in beta testing. It has not hit a solo block yet, but
+  that is expected at typical solo-mining odds and is not a sign that the app is
+  failing.
+
+  Verify payout addresses and pool settings before mining, and send helpful
+  feedback if anything behaves oddly.
 
   Run a Bitcoin (BTC) full node (Bitcoin Core or Bitcoin Knots) and an integrated solo Stratum v1 pool (ckpool) as a single app.
 

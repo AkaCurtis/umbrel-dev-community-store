@@ -5,9 +5,14 @@ name: AxeBC2
 version: "0.1.6-dev"
 tagline: BC2 node + solo pool
 description: >-
-  THESE APPS ARE IN DEVELOPMENT. THEY MAY WORK, THEY MAY NOT. THESE ARE FOR TESTING ONLY.
-  If you want to support development, then use these apps and provide HELPFUL feedback.
-  If you want a working known good app, then DO NOT USE DEV APPS.
+  ALPHA RELEASE (DEV CHANNEL)
+
+  AxeBC2 is functional and has successfully found blocks, but it is still under
+  active development. Expect rough edges, occasional breaking changes, and
+  mining/pool behavior that may still need tuning.
+
+  Use this build if you are happy to test, mine, and send helpful feedback.
+  For known-good production setups, use stable/main channel apps.
 
   Run a BitcoinII (BC2) full node and an integrated solo Stratum v1 pool (ckpool) as a single app.
 

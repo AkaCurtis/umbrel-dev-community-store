@@ -5,9 +5,14 @@ name: AxeXEC
 version: "0.1.13-dev"
 tagline: XEC node + solo pool
 description: >-
-  THESE APPS ARE IN DEVELOPMENT. THEY MAY WORK, THEY MAY NOT. THESE ARE FOR TESTING ONLY.
-  If you want to support development, then use these apps and provide HELPFUL feedback.
-  If you want a working known good app, then DO NOT USE DEV APPS.
+  ALPHA RELEASE (DEV CHANNEL)
+
+  AxeXEC is functional and has successfully found blocks, but it is still under
+  active development. Expect rough edges, occasional breaking changes, and
+  mining/pool behavior that may still need tuning.
+
+  Use this build if you are happy to test, mine, and send helpful feedback.
+  For known-good production setups, use stable/main channel apps.
 
   **IMPORTANT (XEC MINING RULES):** eCash enforces mandatory coinbase deductions (Miner Fund + staking rewards).
   This is NOT set by AxeXEC / WillItMod and is not configurable or removable by the app.

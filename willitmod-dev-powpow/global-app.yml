@@ -2,16 +2,17 @@ manifestVersion: 1
 id: willitmod-dev-powpow
 category: altcoin
 name: "PowPow"
-version: "0.2.24-dev"
+version: "0.2.25-dev"
 tagline: LTC + DOGE merged mining (alpha dev)
 description: >-
   ALPHA RELEASE (DEV CHANNEL)
 
-  May break while this is being tested. You have been warned!
+  PowPow is functional and has successfully found blocks, but it is still under
+  active development. Expect rough edges, occasional breaking changes, and
+  mining/pool behavior that may still need tuning.
 
-  THIS APP IS IN DEVELOPMENT. IT MAY WORK, IT MAY NOT. THIS IS FOR TESTING ONLY.
-  If you want to support development, use this app and provide HELPFUL feedback.
-  If you want a working known-good app, DO NOT USE DEV APPS.
+  Use this build if you are happy to test, mine, and send helpful feedback.
+  For known-good production setups, use stable/main channel apps.
 
   Miner connection:
     - URL: `stratum+tcp://<your-5tratumos-host-ip>:9555`

@@ -7,7 +7,7 @@ services:
       APP_PORT: 12150
 
   server:
-    image: ghcr.io/willitmod/axemig:0.1.19
+    image: ghcr.io/willitmod/axemig:0.1.20-dev
     restart: on-failure
     stop_grace_period: 30s
     init: true
