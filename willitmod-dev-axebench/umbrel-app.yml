@@ -2,7 +2,7 @@
 id: willitmod-dev-axebench
 category: bitcoin
 name: AxeBench (Dev)
-version: "4.0.20"
+version: "4.0.21"
 tagline: Bitaxe fleet benchmarking and management
 icon: https://raw.githubusercontent.com/WillItMod/umbrel-community-store/main/willitmod-axebench/icon.png
 description: >-
@@ -33,8 +33,8 @@ path: ""
 defaultUsername: ""
 defaultPassword: ""
 releaseNotes: >-
-  v4.0.20:
-    - Remove Patreon and device-limit restrictions while keeping licensing telemetry ping.
-    - Fix dashboard current-pool display to use the live AxePool source.
-    - Harden Avalon Q pool switching so success requires the new pool order to take effect.
+  v4.0.21-dev:
+    - Add Avalon Q power profile controls in device config.
+    - Apply Avalon Q/Nano3S work modes from AxePool schedules.
+    - Surface Canaan work modes in Profiles and Operations instead of treating Avalon Q as unsupported.
 submitter: WillItMod
