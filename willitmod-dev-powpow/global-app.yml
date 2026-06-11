@@ -2,7 +2,7 @@ manifestVersion: 1
 id: willitmod-dev-powpow
 category: altcoin
 name: "PowPow"
-version: "0.2.26-dev"
+version: "0.2.27-dev"
 tagline: LTC + DOGE merged mining (alpha dev)
 description: >-
   ALPHA RELEASE (DEV CHANNEL)
@@ -56,7 +56,7 @@ widgets:
       items:
         - title: "Hashrate"
           text: "1.2"
-          subtext: "TH/s"
+          subtext: "GH/s"
         - title: "Workers"
           text: "2"
         - title: "Best share"

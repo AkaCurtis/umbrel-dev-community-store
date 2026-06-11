@@ -5,7 +5,7 @@ This package is now wired to the real PowPow stack.
 ## Current status
 
 - Uses GHCR images published from `WillItMod/PowPow_Build`
-- App image: `ghcr.io/willitmod/powpow-app:0.2.26-dev`
+- App image: `ghcr.io/willitmod/powpow-app:0.2.27-dev`
 - Service images:
   - `ghcr.io/willitmod/powpow-litecoin:0.2.26-dev`
   - `ghcr.io/willitmod/powpow-dogecoin:0.2.26-dev`
@@ -13,6 +13,7 @@ This package is now wired to the real PowPow stack.
 - Runtime UI behavior was smoke-tested on the current live host baseline at `10.10.10.235`
 - Miner endpoint hint is injected through packaging with `NETWORK_HOST_HINT: "${NETWORK_IP}"`
 - App version display is set from `APP_VERSION`
+- Difficulty presets are labelled and tuned around Scrypt GH/s miner hashrates. This update only changes the app image, so existing LTC/DOGE node containers do not need to restart.
 
 ## Packaging notes
 
