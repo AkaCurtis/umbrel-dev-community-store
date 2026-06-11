@@ -9,6 +9,14 @@ if ! command -v bitcoind >/dev/null 2>&1; then
 fi
 
 extra=""
+if [ -f /data/btc_wipe_request ]; then
+  echo "[fracattack] Full Fractal chain wipe requested."
+  rm -rf /data/blocks /data/chainstate /data/indexes
+  rm -f /data/.lock /data/bitcoind.pid /data/mempool.dat /data/fee_estimates.dat /data/peers.dat
+  rm -f /data/.reindex-chainstate /data/btc_wipe_request
+  echo "[fracattack] Fractal chain data removed; starting fresh sync."
+fi
+
 if [ -f /data/.reindex-chainstate ]; then
   echo "[fracattack] Reindex requested (chainstate)."
   rm -f /data/.reindex-chainstate || true
