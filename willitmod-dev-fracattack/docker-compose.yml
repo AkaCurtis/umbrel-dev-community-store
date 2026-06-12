@@ -76,6 +76,20 @@ services:
             echo '' >> /data/node/bitcoin.conf
             echo 'maxconnections=256' >> /data/node/bitcoin.conf
           fi
+
+          # Keep Fractal peer discovery healthy on existing installs. The
+          # service-bit x9 seeds return reachable mainnet full-relay peers.
+          ensure_conf_line() {
+            line="$$1"
+            grep -qxF "$$line" /data/node/bitcoin.conf || echo "$$line" >> /data/node/bitcoin.conf
+          }
+          ensure_conf_line 'dnsseed=1'
+          ensure_conf_line 'fixedseeds=1'
+          ensure_conf_line 'forcednsseed=1'
+          ensure_conf_line 'seednode=x9.dnsseed-mainnet.fractalbitcoin.io'
+          ensure_conf_line 'seednode=x9.dnsseed-mainnet.unisat.io'
+          ensure_conf_line 'addnode=x9.dnsseed-mainnet.fractalbitcoin.io'
+          ensure_conf_line 'addnode=x9.dnsseed-mainnet.unisat.io'
           chown 1000:1000 /data/node/bitcoin.conf || true
         fi
 
@@ -167,7 +181,7 @@ services:
     entrypoint: ["/bin/sh", "/ckpool-entrypoint.sh"]
 
   app:
-    image: ghcr.io/willitmod/fracattack-app-umbrel-dev:0.1.0.2-dev
+    image: ghcr.io/willitmod/fracattack-app-umbrel-dev:0.1.0.3-dev
     user: "1000:1000"
     restart: on-failure
     stop_grace_period: 30s
