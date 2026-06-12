@@ -69,6 +69,14 @@ services:
           envsubst < /data/templates/bitcoin.conf.template > /data/node/bitcoin.conf
           chown -R 1000:1000 /data/node
         else
+          # Repair old/hand-edited configs without changing chain data. This
+          # removes accidental garbage lines and exact duplicate entries.
+          tmp_conf="/data/node/bitcoin.conf.tmp"
+          awk '
+            /^[[:space:]]*password123[[:space:]]*$/ { next }
+            { if (!seen[$0]++) print }
+          ' /data/node/bitcoin.conf > "$$tmp_conf" && mv "$$tmp_conf" /data/node/bitcoin.conf
+
           # Keep peer limit high on existing installs too.
           if grep -q '^maxconnections=' /data/node/bitcoin.conf; then
             sed -i 's/^maxconnections=.*/maxconnections=256/' /data/node/bitcoin.conf
@@ -159,11 +167,11 @@ services:
       - ${APP_DATA_DIR}/data/templates/fractald-entrypoint.sh:/fractald-entrypoint.sh:ro
     entrypoint: ["/bin/sh", "/fractald-entrypoint.sh"]
     healthcheck:
-      test: ["CMD-SHELL", "bitcoin-cli -datadir=/data getblockchaininfo >/dev/null 2>&1"]
+      test: ["CMD-SHELL", "bitcoin-cli -datadir=/data -rpcclienttimeout=20 getnetworkinfo >/dev/null 2>&1"]
       interval: 30s
-      timeout: 10s
-      retries: 20
-      start_period: 2m
+      timeout: 30s
+      retries: 60
+      start_period: 10m
 
   ckpool:
     image: ghcr.io/willitmod/docker-ckpool-solo:590fb2a
@@ -181,7 +189,7 @@ services:
     entrypoint: ["/bin/sh", "/ckpool-entrypoint.sh"]
 
   app:
-    image: ghcr.io/willitmod/fracattack-app-umbrel-dev:0.1.0.3-dev
+    image: ghcr.io/willitmod/fracattack-app-umbrel-dev:0.1.0.4-dev
     user: "1000:1000"
     restart: on-failure
     stop_grace_period: 30s

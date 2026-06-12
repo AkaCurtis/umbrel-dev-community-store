@@ -27,10 +27,20 @@ dbcache="${BTC_DBCACHE_MB:-}"
 if [ -z "${dbcache}" ]; then
   mem_kb="$(awk '/MemTotal/ {print $2}' /proc/meminfo 2>/dev/null || echo 0)"
   mem_mb="$((mem_kb / 1024))"
-  # Conservative: ~1/8 of RAM, clamped.
-  dbcache="$((mem_mb / 8))"
+  # Conservative by default, but give larger SSD-backed nodes a little more
+  # cache during the long initial Fractal sync.
+  if [ "$mem_mb" -ge 12000 ]; then
+    dbcache="$((mem_mb / 6))"
+    max_dbcache=4096
+  elif [ "$mem_mb" -ge 7000 ]; then
+    dbcache="$((mem_mb / 6))"
+    max_dbcache=2048
+  else
+    dbcache="$((mem_mb / 8))"
+    max_dbcache=1024
+  fi
   if [ "$dbcache" -lt 256 ]; then dbcache=256; fi
-  if [ "$dbcache" -gt 2048 ]; then dbcache=2048; fi
+  if [ "$dbcache" -gt "$max_dbcache" ]; then dbcache="$max_dbcache"; fi
 fi
 
 echo "[fracattack] Using dbcache=${dbcache}MB"
