@@ -70,6 +70,16 @@ services:
           grep -qxF "$$line" /data/node/bitcoin.conf || echo "$$line" >> /data/node/bitcoin.conf
         }
 
+        set_bitcoin_conf_key() {
+          key="$$1"
+          value="$$2"
+          if grep -Eq "^[#[:space:]]*$$key=" /data/node/bitcoin.conf; then
+            sed -i "s|^[#[:space:]]*$$key=.*|$$key=$$value|" /data/node/bitcoin.conf
+          else
+            echo "$$key=$$value" >> /data/node/bitcoin.conf
+          fi
+        }
+
         refresh_fractal_seed_addnodes() {
           # Resolve service-bit DNS seeds and pin current reachable peer
           # candidates explicitly. Fractal seed DNS is sparse during IBD, and
@@ -97,13 +107,11 @@ services:
             { if (!seen[$0]++) print }
           ' /data/node/bitcoin.conf > "$$tmp_conf" && mv "$$tmp_conf" /data/node/bitcoin.conf
 
-          # Keep peer limit high on existing installs too.
-          if grep -q '^maxconnections=' /data/node/bitcoin.conf; then
-            sed -i 's/^maxconnections=.*/maxconnections=256/' /data/node/bitcoin.conf
-          else
-            echo '' >> /data/node/bitcoin.conf
-            echo 'maxconnections=256' >> /data/node/bitcoin.conf
-          fi
+          # Keep existing installs reachable and discovery-enabled without changing chain data.
+          set_bitcoin_conf_key 'listen' '1'
+          set_bitcoin_conf_key 'discover' '1'
+          set_bitcoin_conf_key 'maxconnections' '256'
+          set_bitcoin_conf_key 'port' "$${BTC_P2P_PORT}"
 
           # Keep Fractal peer discovery healthy on existing installs. The
           # service-bit x9 seeds return reachable mainnet full-relay peers.
@@ -172,7 +180,7 @@ services:
         fi
 
   fractald:
-    image: ghcr.io/willitmod/fracattack-fractald:0.3.0-dev
+    image: ghcr.io/willitmod/fracattack-fractald:0.3.1-dev
     user: "1000:1000"
     restart: unless-stopped
     stop_grace_period: 15m30s
@@ -182,6 +190,8 @@ services:
     volumes:
       - ${APP_DATA_DIR}/data/node:/data
       - ${APP_DATA_DIR}/data/templates/fractald-entrypoint.sh:/fractald-entrypoint.sh:ro
+    ports:
+      - "28343:28343/tcp"
     entrypoint: ["/bin/sh", "/fractald-entrypoint.sh"]
     healthcheck:
       test: ["CMD-SHELL", "bitcoin-cli -datadir=/data -rpcclienttimeout=20 getnetworkinfo >/dev/null 2>&1"]
@@ -206,7 +216,7 @@ services:
     entrypoint: ["/bin/sh", "/ckpool-entrypoint.sh"]
 
   app:
-    image: ghcr.io/willitmod/fracattack-app-umbrel-dev:0.1.0.6-dev
+    image: ghcr.io/willitmod/fracattack-app-umbrel-dev:0.1.0.7-dev
     user: "1000:1000"
     restart: on-failure
     stop_grace_period: 30s
@@ -225,6 +235,7 @@ services:
     environment:
       BTC_RPC_HOST: "fractald"
       BTC_RPC_PORT: "28342"
+      BTC_P2P_PORT: "28343"
       BTC_RPC_USER: "fractal"
       BTC_RPC_PASS: "${APP_PASSWORD}"
       CKPOOL_STATUS_DIR: "/data/pool/www/pool"
@@ -232,7 +243,7 @@ services:
       CKPOOL_STRATUM_PORT: "3333"
       APP_CHANNEL: "EXPERIMENTAL"
       APP_VERSION_SUFFIX: "-dev"
-      FRACTAL_IMAGE: "ghcr.io/willitmod/fracattack-fractald:0.3.0-dev"
+      FRACTAL_IMAGE: "ghcr.io/willitmod/fracattack-fractald:0.3.1-dev"
       CKPOOL_IMAGE: "ghcr.io/willitmod/docker-ckpool-solo:590fb2a"
       STATIC_DIR: "/app/static"
 

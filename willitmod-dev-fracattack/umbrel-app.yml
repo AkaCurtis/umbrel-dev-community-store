@@ -2,7 +2,7 @@ manifestVersion: 1
 id: willitmod-dev-fracattack
 category: bitcoin
 name: FracAttack
-version: "0.1.0.6-dev"
+version: "0.1.0.7-dev"
 tagline: Fractal node + solo pool
 description: >-
   EXPERIMENTAL RELEASE (DEV CHANNEL)
@@ -29,6 +29,7 @@ description: >-
 
   Notes:
     - Initial sync can take a long time and a lot of bandwidth/storage.
+    - Fractal P2P listens on TCP `28343`; forward public TCP `28343` to this node for inbound peers.
     - This app has not yet proven a live Fractal block find.
     - External SSD storage is strongly recommended; Fractal mining-node prune mode is still roughly 300 GB on mainnet.
     - Blockchains can carry arbitrary data (e.g. via `OP_RETURN`). That’s not unique to any one chain.

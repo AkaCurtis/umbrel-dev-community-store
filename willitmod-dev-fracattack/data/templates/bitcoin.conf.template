@@ -1,5 +1,7 @@
 server=1
 txindex=0
+listen=1
+discover=1
 
 # Fractal mining nodes can run pruned. Keep the default conservative for
 # test boxes; serious mining nodes still need substantial SSD storage.
