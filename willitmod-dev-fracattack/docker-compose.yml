@@ -29,7 +29,7 @@ services:
       - |-
         set -eu
 
-        apk add --no-cache envsubst jq >/dev/null
+        apk add --no-cache bind-tools envsubst jq >/dev/null
 
         # Persist JWT secret into ${APP_DATA_DIR}/.env so that SSH restarts
         # (without exports.sh) don't boot app_proxy with an empty JWT_SECRET.
@@ -65,6 +65,26 @@ services:
         touch /appdata/settings.yml
         chown 1000:1000 /appdata/settings.yml || true
 
+        ensure_bitcoin_conf_line() {
+          line="$$1"
+          grep -qxF "$$line" /data/node/bitcoin.conf || echo "$$line" >> /data/node/bitcoin.conf
+        }
+
+        refresh_fractal_seed_addnodes() {
+          # Resolve service-bit DNS seeds and pin current reachable peer
+          # candidates explicitly. Fractal seed DNS is sparse during IBD, and
+          # hostname-only addnode entries have left nodes with too few peers.
+          for seed in x9.dnsseed-mainnet.fractalbitcoin.io x9.dnsseed-mainnet.unisat.io; do
+            dig +short A "$$seed" 2>/dev/null \
+              | awk '/^[0-9.]+$$/ { print }' \
+              | sort -u \
+              | while read -r ip; do
+                  [ -n "$$ip" ] || continue
+                  ensure_bitcoin_conf_line "addnode=$$ip:8333"
+                done
+          done
+        }
+
         if [ ! -f /data/node/bitcoin.conf ]; then
           envsubst < /data/templates/bitcoin.conf.template > /data/node/bitcoin.conf
           chown -R 1000:1000 /data/node
@@ -87,19 +107,16 @@ services:
 
           # Keep Fractal peer discovery healthy on existing installs. The
           # service-bit x9 seeds return reachable mainnet full-relay peers.
-          ensure_conf_line() {
-            line="$$1"
-            grep -qxF "$$line" /data/node/bitcoin.conf || echo "$$line" >> /data/node/bitcoin.conf
-          }
-          ensure_conf_line 'dnsseed=1'
-          ensure_conf_line 'fixedseeds=1'
-          ensure_conf_line 'forcednsseed=1'
-          ensure_conf_line 'seednode=x9.dnsseed-mainnet.fractalbitcoin.io'
-          ensure_conf_line 'seednode=x9.dnsseed-mainnet.unisat.io'
-          ensure_conf_line 'addnode=x9.dnsseed-mainnet.fractalbitcoin.io'
-          ensure_conf_line 'addnode=x9.dnsseed-mainnet.unisat.io'
-          chown 1000:1000 /data/node/bitcoin.conf || true
+          ensure_bitcoin_conf_line 'dnsseed=1'
+          ensure_bitcoin_conf_line 'fixedseeds=1'
+          ensure_bitcoin_conf_line 'forcednsseed=1'
+          ensure_bitcoin_conf_line 'seednode=x9.dnsseed-mainnet.fractalbitcoin.io'
+          ensure_bitcoin_conf_line 'seednode=x9.dnsseed-mainnet.unisat.io'
+          ensure_bitcoin_conf_line 'addnode=x9.dnsseed-mainnet.fractalbitcoin.io'
+          ensure_bitcoin_conf_line 'addnode=x9.dnsseed-mainnet.unisat.io'
         fi
+        refresh_fractal_seed_addnodes
+        chown 1000:1000 /data/node/bitcoin.conf || true
 
         if [ ! -f /data/pool/config/ckpool.conf ]; then
           envsubst < /data/templates/ckpool.conf.template > /data/pool/config/ckpool.conf
@@ -189,7 +206,7 @@ services:
     entrypoint: ["/bin/sh", "/ckpool-entrypoint.sh"]
 
   app:
-    image: ghcr.io/willitmod/fracattack-app-umbrel-dev:0.1.0.4-dev
+    image: ghcr.io/willitmod/fracattack-app-umbrel-dev:0.1.0.5-dev
     user: "1000:1000"
     restart: on-failure
     stop_grace_period: 30s
