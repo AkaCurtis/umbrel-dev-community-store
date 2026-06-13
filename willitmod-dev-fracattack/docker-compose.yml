@@ -80,30 +80,17 @@ services:
           fi
         }
 
-        refresh_fractal_seed_addnodes() {
-          # Resolve service-bit DNS seeds and pin current reachable peer
-          # candidates explicitly. Fractal seed DNS is sparse during IBD, and
-          # hostname-only addnode entries have left nodes with too few peers.
-          for seed in x9.dnsseed-mainnet.fractalbitcoin.io x9.dnsseed-mainnet.unisat.io; do
-            dig +short A "$$seed" 2>/dev/null \
-              | awk '/^[0-9.]+$$/ { print }' \
-              | sort -u \
-              | while read -r ip; do
-                  [ -n "$$ip" ] || continue
-                  ensure_bitcoin_conf_line "addnode=$$ip:8333"
-                done
-          done
-        }
-
         if [ ! -f /data/node/bitcoin.conf ]; then
           envsubst < /data/templates/bitcoin.conf.template > /data/node/bitcoin.conf
           chown -R 1000:1000 /data/node
         else
           # Repair old/hand-edited configs without changing chain data. This
-          # removes accidental garbage lines and exact duplicate entries.
+          # removes accidental garbage lines, stale persistent addnode entries,
+          # and exact duplicate entries.
           tmp_conf="/data/node/bitcoin.conf.tmp"
           awk '
             /^[[:space:]]*password123[[:space:]]*$/ { next }
+            /^[#[:space:]]*addnode=/ { next }
             { if (!seen[$0]++) print }
           ' /data/node/bitcoin.conf > "$$tmp_conf" && mv "$$tmp_conf" /data/node/bitcoin.conf
 
@@ -120,10 +107,7 @@ services:
           ensure_bitcoin_conf_line 'forcednsseed=1'
           ensure_bitcoin_conf_line 'seednode=x9.dnsseed-mainnet.fractalbitcoin.io'
           ensure_bitcoin_conf_line 'seednode=x9.dnsseed-mainnet.unisat.io'
-          ensure_bitcoin_conf_line 'addnode=x9.dnsseed-mainnet.fractalbitcoin.io'
-          ensure_bitcoin_conf_line 'addnode=x9.dnsseed-mainnet.unisat.io'
         fi
-        refresh_fractal_seed_addnodes
         chown 1000:1000 /data/node/bitcoin.conf || true
 
         if [ ! -f /data/pool/config/ckpool.conf ]; then
@@ -216,7 +200,7 @@ services:
     entrypoint: ["/bin/sh", "/ckpool-entrypoint.sh"]
 
   app:
-    image: ghcr.io/willitmod/fracattack-app-umbrel-dev:0.1.0.8-dev
+    image: ghcr.io/willitmod/fracattack-app-umbrel-dev:0.1.0.9-dev
     user: "1000:1000"
     restart: on-failure
     stop_grace_period: 30s
