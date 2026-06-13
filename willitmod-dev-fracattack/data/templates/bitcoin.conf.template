@@ -13,10 +13,12 @@ dnsseed=1
 fixedseeds=1
 forcednsseed=1
 
-# Fractal mainnet service-bit DNS seeds. Persistent addnode entries are avoided
-# because stale manual peers can crowd out normal discovery during IBD.
+# Fractal mainnet service-bit DNS seeds. The root seed hostnames can be empty
+# unless queried with the service prefix, so keep explicit x9 seeds here.
 seednode=x9.dnsseed-mainnet.fractalbitcoin.io
 seednode=x9.dnsseed-mainnet.unisat.io
+addnode=x9.dnsseed-mainnet.fractalbitcoin.io
+addnode=x9.dnsseed-mainnet.unisat.io
 
 # Mainnet only.
 
