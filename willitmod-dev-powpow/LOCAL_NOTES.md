@@ -5,7 +5,7 @@ This package is now wired to the real PowPow stack.
 ## Current status
 
 - Uses GHCR images published from `WillItMod/PowPow_Build`
-- App image: `ghcr.io/willitmod/powpow-app:0.2.27-dev`
+- App image: `ghcr.io/willitmod/powpow-app:0.2.28-dev`
 - Service images:
   - `ghcr.io/willitmod/powpow-litecoin:0.2.26-dev`
   - `ghcr.io/willitmod/powpow-dogecoin:0.2.26-dev`
