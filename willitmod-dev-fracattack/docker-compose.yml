@@ -220,6 +220,8 @@ services:
     user: "1000:1000"
     restart: on-failure
     stop_grace_period: 30s
+    ports:
+      - "21225:3000/tcp"
     depends_on:
       - fractald
       - ckpool
