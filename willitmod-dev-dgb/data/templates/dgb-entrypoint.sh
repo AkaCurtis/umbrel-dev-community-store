@@ -67,20 +67,20 @@ if [ -z "$dbcache" ] && [ -r /proc/meminfo ]; then
   mem_kb="$(awk '/^MemTotal:/ {print $2}' /proc/meminfo 2>/dev/null || true)"
   if [ -n "$mem_kb" ]; then
     mem_mb="$((mem_kb / 1024))"
-    # Note: MemTotal is often slightly under "marketing" RAM (e.g. 16GB hosts can show <16384 MiB).
-    # Treat >=15GiB as "16GB-class".
-    if [ "$mem_mb" -ge 15360 ]; then
-      dbcache="8192"
+    # Keep Auto conservative because users often run BCH/DGB/other nodes together,
+    # and HDD-backed systems suffer badly when validation and swapping collide.
+    if [ "$mem_mb" -ge 8192 ]; then
+      dbcache="4096"
     else
-      dbcache="6144"
+      dbcache="2048"
     fi
   fi
 fi
 
 if [ -n "$dbcache" ] && echo "$dbcache" | grep -Eq '^[0-9]+$'; then
-  if [ "$dbcache" -lt 6144 ]; then
-    echo "[axedgb] WARNING: dbcache=$dbcache too low; clamping to 6144MB minimum"
-    dbcache="6144"
+  if [ "$dbcache" -lt 1024 ]; then
+    echo "[axedgb] WARNING: dbcache=$dbcache too low; clamping to 1024MB minimum"
+    dbcache="1024"
   fi
 fi
 
