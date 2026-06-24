@@ -143,6 +143,106 @@ services:
         mkdir -p /data/node /data/pool/config /data/pool/postgres /data/templates
         mkdir -p /data/ui/state
 
+        # Refresh the mounted node entrypoint on every update. Older installs keep
+        # this file in persistent data, so app updates must overwrite stale copies.
+        cat > /data/templates/dgb-entrypoint.sh <<'DGB_ENTRYPOINT'
+        #!/bin/sh
+        set -eu
+
+        echo "[axedgb] DGB entrypoint starting"
+
+        if ! command -v digibyted >/dev/null 2>&1; then
+          echo "[axedgb] ERROR: digibyted not found in PATH"
+          exit 127
+        fi
+
+        heal_node_json() {
+          file="$$1"
+          name="$$2"
+          [ -e "$$file" ] || return 0
+
+          if [ ! -s "$$file" ]; then
+            ts="$$(date +%Y%m%dT%H%M%SZ 2>/dev/null || date +%s)"
+            echo "[axedgb] Removing empty $$name: $$file"
+            mv "$$file" "$$file.bad.$$ts" 2>/dev/null || rm -f "$$file" || true
+            return 0
+          fi
+
+          if command -v jq >/dev/null 2>&1; then
+            if ! jq -e 'type == "object"' < "$$file" >/dev/null 2>&1; then
+              ts="$$(date +%Y%m%dT%H%M%SZ 2>/dev/null || date +%s)"
+              echo "[axedgb] Quarantining malformed $$name: $$file"
+              mv "$$file" "$$file.bad.$$ts" 2>/dev/null || rm -f "$$file" || true
+            fi
+          fi
+        }
+
+        if [ "$$(id -u)" = "0" ]; then
+          mkdir -p /data || true
+          chown 1000:1000 /data 2>/dev/null || true
+          chmod 755 /data 2>/dev/null || true
+          [ -f /data/digibyte.conf ] && chown 1000:1000 /data/digibyte.conf 2>/dev/null || true
+          [ -f /data/.dbcache_mb ] && chown 1000:1000 /data/.dbcache_mb 2>/dev/null || true
+          [ -f /data/settings.json ] && chown 1000:1000 /data/settings.json 2>/dev/null || true
+        fi
+
+        heal_node_json /data/settings.json "DigiByte settings file"
+
+        extra=""
+        if [ -f /data/.reindex-chainstate ]; then
+          echo "[axedgb] Reindex requested (chainstate)."
+          rm -f /data/.reindex-chainstate || true
+          extra="-reindex-chainstate"
+        fi
+
+        dbcache="$${DGB_DBCACHE_MB:-}"
+        if [ -z "$$dbcache" ] && [ -f /data/.dbcache_mb ]; then
+          raw="$$(cat /data/.dbcache_mb 2>/dev/null | tr -d ' \t\r\n' || true)"
+          case "$$raw" in
+            ""|auto|AUTO)
+              dbcache=""
+              ;;
+            *[!0-9]*)
+              echo "[axedgb] WARNING: invalid /data/.dbcache_mb value, ignoring"
+              dbcache=""
+              ;;
+            *)
+              dbcache="$$raw"
+              ;;
+          esac
+        fi
+
+        if [ -z "$$dbcache" ] && [ -r /proc/meminfo ]; then
+          mem_kb="$$(awk '/^MemTotal:/ {print $$2}' /proc/meminfo 2>/dev/null || true)"
+          if [ -n "$$mem_kb" ]; then
+            mem_mb="$$((mem_kb / 1024))"
+            # Keep Auto conservative because users often run BCH/DGB/other nodes together,
+            # and HDD-backed systems suffer badly when validation and swapping collide.
+            if [ "$$mem_mb" -ge 8192 ]; then
+              dbcache="4096"
+            else
+              dbcache="2048"
+            fi
+          fi
+        fi
+
+        if [ -n "$$dbcache" ] && echo "$$dbcache" | grep -Eq '^[0-9]+$$'; then
+          if [ "$$dbcache" -lt 1024 ]; then
+            echo "[axedgb] WARNING: dbcache=$$dbcache too low; clamping to 1024MB minimum"
+            dbcache="1024"
+          fi
+        fi
+
+        if [ -n "$$dbcache" ]; then
+          extra="$$extra -dbcache=$$dbcache"
+        fi
+
+        echo "[axedgb] Exec: digibyted -datadir=/data -printtoconsole $$extra"
+        exec digibyted -datadir=/data -printtoconsole $$extra
+        DGB_ENTRYPOINT
+        chmod 755 /data/templates/dgb-entrypoint.sh || true
+        chown 1000:1000 /data/templates/dgb-entrypoint.sh || true
+
         heal_json_file() {
           file="$$1"
           label="$$2"
@@ -904,7 +1004,7 @@ services:
       - ${APP_DATA_DIR}/data/pool/config/coins.json:/app/coins.json:ro
 
   app:
-    image: ghcr.io/willitmod/axedgb-app:0.9.171-dev
+    image: ghcr.io/willitmod/axedgb-app:0.9.172-dev
     user: "1000:1000"
     restart: on-failure
     stop_grace_period: 30s
