@@ -1,14 +1,13 @@
-version: "3.7"
-
+version: '3.7'
 services:
   app_proxy:
     environment:
       APP_HOST: fracattack-app
       APP_PORT: 3000
-      JWT_SECRET: "${JWT_SECRET}"
+      JWT_SECRET: ${JWT_SECRET}
     networks:
       - umbrel_main_network
-
+    container_name: willitmod-dev-fracattack_app_proxy_1
   init:
     image: alpine:3.22.1
     volumes:
@@ -16,23 +15,27 @@ services:
       - ${APP_DATA_DIR}:/appdata
       - ${APP_DATA_DIR}/data/templates:/data/templates:rw
     environment:
-      APPS_SUBNET: "${NETWORK_IP}/16"
-      RPC_USER: "fractal"
-      RPC_PASSWORD: "${APP_PASSWORD}"
-      BTC_P2P_PORT: "28343"
-      BTC_RPC_PORT: "28342"
-      BTC_ZMQ_HASHBLOCK_PORT: "28345"
-      PAYOUT_ADDRESS: "bc1qg09gugv3kk2sv8svq7zewmt6ey00gppkctgtzk"
+      APPS_SUBNET: ${NETWORK_IP}/16
+      RPC_USER: fractal
+      RPC_PASSWORD: ${APP_PASSWORD}
+      BTC_P2P_PORT: '28343'
+      BTC_RPC_PORT: '28342'
+      BTC_ZMQ_HASHBLOCK_PORT: '28345'
+      PAYOUT_ADDRESS: bc1qg09gugv3kk2sv8svq7zewmt6ey00gppkctgtzk
     command:
       - /bin/sh
-      - -ec
-      - |-
+      - '-ec'
+      - >-
         set -eu
+
 
         apk add --no-cache bind-tools envsubst jq >/dev/null
 
+
         # Persist JWT secret into ${APP_DATA_DIR}/.env so that SSH restarts
+
         # (without exports.sh) don't boot app_proxy with an empty JWT_SECRET.
+
         if [ -n "$${JWT_SECRET:-}" ]; then
           envfile="/appdata/.env"
           tmp="/appdata/.env.tmp"
@@ -47,10 +50,19 @@ services:
           mv "$$tmp" "$$envfile"
         fi
 
-        mkdir -p /data/node /data/pool/config /data/pool/www/pool /data/pool/www/users
-        # Ensure template scripts are executable (Windows checkouts can lose +x).
-        chmod +x /data/templates/fractald-entrypoint.sh /data/templates/ckpool-entrypoint.sh 2>/dev/null || true
-        chown 1000:1000 /data/templates/fractald-entrypoint.sh /data/templates/ckpool-entrypoint.sh 2>/dev/null || true
+
+        mkdir -p /data/node /data/pool/config /data/pool/www/pool
+        /data/pool/www/users
+
+        # Ensure template scripts are executable (Windows checkouts can lose
+        +x).
+
+        chmod +x /data/templates/fractald-entrypoint.sh
+        /data/templates/ckpool-entrypoint.sh 2>/dev/null || true
+
+        chown 1000:1000 /data/templates/fractald-entrypoint.sh
+        /data/templates/ckpool-entrypoint.sh 2>/dev/null || true
+
 
         if [ -f /data/templates/ckpool.conf.template ]; then
           if grep -q '"auxd"' /data/templates/ckpool.conf.template; then
@@ -61,14 +73,20 @@ services:
           sed -i '/"auxaddress"[[:space:]]*:/d' /data/templates/ckpool.conf.template || true
         fi
 
-        # The host may create settings.yml as root during update/install; ensure it stays writable.
+
+        # The host may create settings.yml as root during update/install; ensure
+        it stays writable.
+
         touch /appdata/settings.yml
+
         chown 1000:1000 /appdata/settings.yml || true
+
 
         ensure_bitcoin_conf_line() {
           line="$$1"
           grep -qxF "$$line" /data/node/bitcoin.conf || echo "$$line" >> /data/node/bitcoin.conf
         }
+
 
         set_bitcoin_conf_key() {
           key="$$1"
@@ -79,6 +97,7 @@ services:
             echo "$$key=$$value" >> /data/node/bitcoin.conf
           fi
         }
+
 
         refresh_fractal_seed_addnodes() {
           # Resolve service-bit DNS seeds and pin current reachable peer
@@ -94,6 +113,7 @@ services:
                 done
           done
         }
+
 
         if [ ! -f /data/node/bitcoin.conf ]; then
           envsubst < /data/templates/bitcoin.conf.template > /data/node/bitcoin.conf
@@ -123,8 +143,11 @@ services:
           ensure_bitcoin_conf_line 'addnode=x9.dnsseed-mainnet.fractalbitcoin.io'
           ensure_bitcoin_conf_line 'addnode=x9.dnsseed-mainnet.unisat.io'
         fi
+
         refresh_fractal_seed_addnodes
+
         chown 1000:1000 /data/node/bitcoin.conf || true
+
 
         if [ ! -f /data/pool/config/ckpool.conf ]; then
           envsubst < /data/templates/ckpool.conf.template > /data/pool/config/ckpool.conf
@@ -174,14 +197,15 @@ services:
           fi
         fi
 
+
         if [ ! -f /data/pool/config/ckpool.args ]; then
           echo "-B" > /data/pool/config/ckpool.args
           chown 1000:1000 /data/pool/config/ckpool.args || true
         fi
-
+    container_name: willitmod-dev-fracattack_init_1
   fractald:
     image: ghcr.io/willitmod/fracattack-fractald:0.3.1-dev
-    user: "1000:1000"
+    user: '1000:1000'
     restart: unless-stopped
     stop_grace_period: 15m30s
     depends_on:
@@ -189,39 +213,47 @@ services:
         condition: service_completed_successfully
     volumes:
       - ${APP_DATA_DIR}/data/node:/data
-      - ${APP_DATA_DIR}/data/templates/fractald-entrypoint.sh:/fractald-entrypoint.sh:ro
+      - >-
+        ${APP_DATA_DIR}/data/templates/fractald-entrypoint.sh:/fractald-entrypoint.sh:ro
     ports:
-      - "28343:28343/tcp"
-    entrypoint: ["/bin/sh", "/fractald-entrypoint.sh"]
+      - 28343:28343/tcp
+    entrypoint:
+      - /bin/sh
+      - /fractald-entrypoint.sh
     healthcheck:
-      test: ["CMD-SHELL", "bitcoin-cli -datadir=/data -rpcclienttimeout=20 getnetworkinfo >/dev/null 2>&1"]
+      test:
+        - CMD-SHELL
+        - >-
+          bitcoin-cli -datadir=/data -rpcclienttimeout=20 getnetworkinfo
+          >/dev/null 2>&1
       interval: 30s
       timeout: 30s
       retries: 60
       start_period: 10m
-
+    container_name: willitmod-dev-fracattack_fractald_1
   ckpool:
     image: ghcr.io/willitmod/docker-ckpool-solo:590fb2a
-    user: "1000:1000"
+    user: '1000:1000'
     depends_on:
       - fractald
     restart: on-failure
     stop_grace_period: 30s
     ports:
-      - "7891:3333/tcp"
+      - 7891:3333/tcp
     volumes:
       - ${APP_DATA_DIR}/data/pool/config:/config:ro
       - ${APP_DATA_DIR}/data/pool/www:/www
-      - ${APP_DATA_DIR}/data/templates/ckpool-entrypoint.sh:/ckpool-entrypoint.sh:ro
-    entrypoint: ["/bin/sh", "/ckpool-entrypoint.sh"]
-
+      - >-
+        ${APP_DATA_DIR}/data/templates/ckpool-entrypoint.sh:/ckpool-entrypoint.sh:ro
+    entrypoint:
+      - /bin/sh
+      - /ckpool-entrypoint.sh
+    container_name: willitmod-dev-fracattack_ckpool_1
   app:
     image: ghcr.io/willitmod/fracattack-app-umbrel-dev:0.1.2-dev
-    user: "1000:1000"
+    user: '1000:1000'
     restart: on-failure
     stop_grace_period: 30s
-    ports:
-      - "21225:3000/tcp"
     depends_on:
       - fractald
       - ckpool
@@ -235,20 +267,20 @@ services:
     volumes:
       - ${APP_DATA_DIR}/data:/data
     environment:
-      BTC_RPC_HOST: "fractald"
-      BTC_RPC_PORT: "28342"
-      BTC_P2P_PORT: "28343"
-      BTC_RPC_USER: "fractal"
-      BTC_RPC_PASS: "${APP_PASSWORD}"
-      CKPOOL_STATUS_DIR: "/data/pool/www/pool"
-      CKPOOL_STRATUM_HOST: "ckpool"
-      CKPOOL_STRATUM_PORT: "3333"
-      APP_CHANNEL: "EXPERIMENTAL"
-      APP_VERSION_SUFFIX: "-dev"
-      FRACTAL_IMAGE: "ghcr.io/willitmod/fracattack-fractald:0.3.1-dev"
-      CKPOOL_IMAGE: "ghcr.io/willitmod/docker-ckpool-solo:590fb2a"
-      STATIC_DIR: "/app/static"
-
+      BTC_RPC_HOST: fractald
+      BTC_RPC_PORT: '28342'
+      BTC_P2P_PORT: '28343'
+      BTC_RPC_USER: fractal
+      BTC_RPC_PASS: ${APP_PASSWORD}
+      CKPOOL_STATUS_DIR: /data/pool/www/pool
+      CKPOOL_STRATUM_HOST: ckpool
+      CKPOOL_STRATUM_PORT: '3333'
+      APP_CHANNEL: EXPERIMENTAL
+      APP_VERSION_SUFFIX: '-dev'
+      FRACTAL_IMAGE: ghcr.io/willitmod/fracattack-fractald:0.3.1-dev
+      CKPOOL_IMAGE: ghcr.io/willitmod/docker-ckpool-solo:590fb2a
+      STATIC_DIR: /app/static
+    container_name: willitmod-dev-fracattack_app_1
 networks:
   umbrel_main_network:
     external: true
